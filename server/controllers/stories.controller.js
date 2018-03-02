@@ -2,16 +2,15 @@ const mongoose = require('mongoose');
 const Story = require('../model/story.model');
 const Editor = require('../model/editor.model');
 const Event = require('../model/event.model').Event;
-const AWS = require('aws-sdk')
-const Credentials = require('../credentials');
+const AWS = require('aws-sdk');
+
+const s3 = new AWS.S3();
 
 AWS.config.update({
   region: 'eu-west-2',
-  accessKeyId: Credentials.AWS_ACCESS_KEY_ID,
-  secretAccessKey: Credentials.AWS_ACCESS_KEY_SECRET
-})
-
-const s3 = new AWS.S3();
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+});
 
 const getToken = (ctx, next) => {
   try {
@@ -20,12 +19,12 @@ const getToken = (ctx, next) => {
       Conditions: [
         ['starts-with', '$key', `event-${ctx.params.eventId}/`]
       ]
-    })
+    });
     ctx.body = res;
   } catch (e) {
-    ctx.throw(400, 'error')
+    ctx.throw(400, 'error');
   }
-}
+};
 
 
 
