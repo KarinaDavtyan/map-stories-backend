@@ -7,7 +7,7 @@ const Console = console;
 
 const app = new Koa();
 const router = require('./router');
-require('./db')('mapstory-backend');
+require('./db');
 
 const port = process.env.PORT;
 
